@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PL-300 Practice Quiz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom scrollbar for better UX */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f3f4f6;
+      border-radius: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #6366f1;
+      border-radius: 6px;
+      border: 3px solid #f3f4f6;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-tr from-indigo-50 via-white to-indigo-50 min-h-screen flex justify-center items-start py-12 px-4">
+
+  <main class="max-w-4xl w-full bg-white shadow-2xl rounded-3xl p-10 md:p-16 ring-1 ring-indigo-200">
+    <h1 class="text-4xl font-extrabold mb-8 text-center text-indigo-700 drop-shadow-lg">PL-300 Practice Quiz</h1>
+    <p class="text-center text-indigo-600 mb-12 max-w-xl mx-auto text-lg font-light tracking-wide">
+      Select the best answer for each question then submit to see your score and highlighted results.
+    </p>
+    <form id="quizForm" class="space-y-10 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-indigo-100 px-2">
+      <!-- Questions inserted by JS -->
+    </form>
+    <div class="mt-12 flex justify-center">
+      <button
+        id="submitBtn"
+        type="button"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-9 rounded-full shadow-lg transition shadow-indigo-400/80 focus:outline-none focus:ring-4 focus:ring-indigo-300"
+      >
+        Submit Quiz
+      </button>
+    </div>
+    <div id="result" class="mt-12 p-6 bg-green-100 rounded-xl hidden text-center text-2xl font-semibold text-green-900 tracking-wide shadow-inner ring-1 ring-green-500"></div>
+  </main>
+
+<script>
+const questionsOriginal = [
+  {
+    question: "1. You need different tables in Power BI to refresh at different intervals (real-time, daily, and weekly). Which storage mode should you use for each?",
+    options: [
+      "A) Set all tables to Import",
+      "B) Set all tables to DirectQuery",
+      "C) Set static/dimension tables to Dual, transactional to DirectQuery, infrequently updated to Import",
+      "D) Set all tables to Live Connection"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "2. A user only needs to view reports but not edit or share content in a Power BI workspace. Which workspace role should you assign?",
+    options: [
+      "A) Member",
+      "B) Viewer",
+      "C) Contributor",
+      "D) Admin"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "3. You want to ensure that each user's report only displays data related to their assigned region. What Power BI feature do you use?",
+    options: [
+      "A) Bookmarks",
+      "B) Row-Level Security",
+      "C) Sensitivity labels",
+      "D) Incremental refresh"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "4. You're merging data from two tables with different columns in Power Query so that all rows are appended below each other. What operation do you perform?",
+    options: [
+      "A) Merge Query",
+      "B) Append Query",
+      "C) Group By",
+      "D) Split Column"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "5. What is the minimum role needed to schedule a dataset refresh in a Power BI workspace?",
+    options: [
+      "A) Viewer",
+      "B) Contributor",
+      "C) Admin",
+      "D) None"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "7. Where can you assign a user to a security role in Power BI Service?",
+    options: [
+      "A) When publishing from Power BI Desktop",
+      "B) Power BI Service Dataset Security settings",
+      "C) DAX editor",
+      "D) Power Query Editor"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "8. You want to visually distinguish revenue above $100,000 in a column chart. Which feature should you use?",
+    options: [
+      "A) Drill-through",
+      "B) Conditional Formatting",
+      "C) Grouping",
+      "D) Forecast"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "10. A Power BI user sees an error trying to publish a dataset because the size exceeds the allowable limit. What is the max dataset size (Pro workspace)?",
+    options: [
+      "A) 500 MB",
+      "B) 1 GB",
+      "C) 3 GB",
+      "D) 10 GB"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "11. Which DAX function should you use to calculate a cumulative sales total sorted by a date column?",
+    options: [
+      "A) TOTALYTD",
+      "B) SUMX",
+      "C) CALCULATE",
+      "D) ALLSELECTED"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "12. What does “Enable load” in Power Query affect?",
+    options: [
+      "A) Data refresh frequency",
+      "B) Whether a query/table appears in the model",
+      "C) Credential settings",
+      "D) Scheduled refresh only"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "13. You have two tables from different databases with the same schema. You need one combined table for reporting. What should you do?",
+    options: [
+      "A) Merge Queries as New",
+      "B) Append Queries as New",
+      "C) Group By",
+      "D) Duplicate Queries"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "14. A user wants to access a report in the Power BI service from a mobile device. What must you do?",
+    options: [
+      "A) Build a mobile page layout in Power BI Desktop",
+      "B) Enable viewing on mobile in Power BI service",
+      "C) Add the user to Admin role",
+      "D) Export to PDF"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "15. Which connector should you use for integrating a Power BI report with a custom Power Apps app hosted in Teams?",
+    options: [
+      "A) Power BI Dataset",
+      "B) Common Data Service",
+      "C) Microsoft Dataverse",
+      "D) Power Apps Dataflow"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "17. What is the default relationship cardinality created in Power BI when importing from a star schema warehouse?",
+    options: [
+      "A) One-to-one",
+      "B) One-to-many",
+      "C) Many-to-one",
+      "D) Many-to-many"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "18. Which feature allows you to mask sensitive data in a Power BI report?",
+    options: [
+      "A) Bookmarks",
+      "B) Sensitivity Labels",
+      "C) Tooltips",
+      "D) Sharing permissions"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "19. Which step helps reduce model memory usage the most for a large fact table?",
+    options: [
+      "A) Enable Auto Date/Time",
+      "B) Remove unnecessary columns",
+      "C) Duplicate the table for snapshots",
+      "D) Add calculated tables"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "20. To set up incremental refresh in Power BI Desktop, which fields are typically required?",
+    options: [
+      "A) Index and Row Count",
+      "B) Date/Time columns for Partitioning",
+      "C) GUID keys",
+      "D) Boolean flag"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "21. What happens if you use both RLS and sensitivity labels in a Power BI dataset?",
+    options: [
+      "A) Only RLS is enforced",
+      "B) Only sensitivity labels are enforced",
+      "C) Both are enforced simultaneously",
+      "D) Neither is enforced"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "22. Which measure will produce the running total of sales by date?",
+    options: [
+      "A) SUM([Sales])",
+      "B) CALCULATE(SUM([Sales]), FILTER(ALLSELECTED('Table'), 'Table'[Date] <= MAX('Table'[Date])))",
+      "C) COUNT([Sales])",
+      "D) SUMX([Sales])"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "23. What must you do before setting up scheduled refresh for a Power BI dataset sourced from on-prem SQL Server?",
+    options: [
+      "A) Set up a Gateway",
+      "B) Assign Admin permissions",
+      "C) Delete relationships",
+      "D) Export data to Excel"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "25. Which table relationship will always allow one row in Table A to match many rows in Table B?",
+    options: [
+      "A) Many-to-one",
+      "B) One-to-one",
+      "C) One-to-many",
+      "D) Many-to-many"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "27. What is the main difference between calculated columns and measures in Power BI?",
+    options: [
+      "A) Measures are computed on refresh, calculated columns on the fly",
+      "B) Calculated columns are computed during data load, measures on the fly as filters are applied",
+      "C) Both are always computed during data load",
+      "D) There is no difference"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "28. You want to visually group regions whose sales exceed a threshold and those that don’t. Which Power BI feature do you use?",
+    options: [
+      "A) Grouping",
+      "B) Conditional Formatting",
+      "C) Bookmarks",
+      "D) Q&A Visual"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "29. If you need to schedule refresh for a report using a web API dataset, what must you do?",
+    options: [
+      "A) Nothing; refresh is automatic",
+      "B) Add credentials in Power BI Service and configure a Gateway if necessary",
+      "C) Change storage mode to Import",
+      "D) Install Power BI Desktop on the server"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "30. Which DAX function returns the last date in a column with sales transactions?",
+    options: [
+      "A) MAX",
+      "B) LASTDATE",
+      "C) FINALDATE",
+      "D) TOPN"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "31. How do you configure item-level security for datasets in Power BI Service?",
+    options: [
+      "A) Enable it in workspace settings",
+      "B) Set RLS filters and assign users to roles",
+      "C) Add items to app navigation",
+      "D) Use bookmarks"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "32. Which of the following can NOT be published to a Power BI workspace?",
+    options: [
+      "A) Report",
+      "B) Dashboard",
+      "C) Dataset",
+      "D) Dataflow"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "33. How do you prevent a column in Power BI from automatically summarizing (e.g., showing totals)?",
+    options: [
+      "A) Set Data Type to \"Do not summarize\"",
+      "B) Change Summarization to \"Don't summarize\"",
+      "C) Remove Column",
+      "D) Make it a measure"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "34. What does the \"Auto Date/Time\" feature do?",
+    options: [
+      "A) Automatically refreshes all date columns",
+      "B) Creates hidden date tables for each date field",
+      "C) Adds date slicers everywhere",
+      "D) Exports models to Excel"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "36. Users want to sort months by fiscal quarter rather than calendar sequence. Where do you set up a custom sorting order?",
+    options: [
+      "A) Power Query only",
+      "B) In the data model: “Sort by Column”",
+      "C) On visuals",
+      "D) In DAX editor"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "37. Which permission is required to share a Power BI dashboard with other users?",
+    options: [
+      "A) Contributor",
+      "B) Member",
+      "C) Admin",
+      "D) Can share or higher"
+    ],
+    correctIndexes: [3]
+  },
+  {
+    question: "38. Which DAX function retrieves the value 30 days before the currently filtered date?",
+    options: [
+      "A) DATEADD([Date], -30, DAY)",
+      "B) PREVIOUSDAY([Date],30)",
+      "C) LASTDATE([Date],-30)",
+      "D) EARLIER([Date],30)"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "39. If a user in your organization should see everything but be unable to delete content, which workspace role should you assign?",
+    options: [
+      "A) Admin",
+      "B) Member",
+      "C) Contributor",
+      "D) Viewer"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "40. Where are you able to configure scheduled refresh for Power BI datasets?",
+    options: [
+      "A) Power BI Desktop",
+      "B) Power BI Service (Settings)",
+      "C) SQL Server Management Studio",
+      "D) Azure Portal"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "41. Which visual would most help analyze customer churn trends month over month?",
+    options: [
+      "A) Matrix",
+      "B) Funnel Chart",
+      "C) Line Chart",
+      "D) KPI Card"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "42. You want to see the most recent cost value for each item over time even if missing data for some days. Which DAX pattern works best?",
+    options: [
+      "A) CALCULATE(MAX([Cost]), FILTER(...))",
+      "B) LASTNONBLANK([Date],[Cost])",
+      "C) SUM([Cost])",
+      "D) ALLSELECTED([Date])"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "43. Which Power BI Service action will revoke a user's access to both viewing and editing a report?",
+    options: [
+      "A) Remove from workspace",
+      "B) Change to Viewer role",
+      "C) Remove report from their Favorites",
+      "D) Assign them RLS"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "44. Which data type is best for columns used in relationships in Power BI models?",
+    options: [
+      "A) Text",
+      "B) Whole Number",
+      "C) Currency",
+      "D) Decimal Number"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "45. Which connector do you use to connect to a SharePoint Online List?",
+    options: [
+      "A) OData Feed",
+      "B) SharePoint Folder",
+      "C) SharePoint List",
+      "D) Web"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "46. If you use DirectQuery mode with Azure SQL Database, how is data queried?",
+    options: [
+      "A) Data is imported to PBIX at refresh",
+      "B) Queries run live against Azure SQL Database",
+      "C) Data is staged in Dataflow, then imported",
+      "D) Data is only retrieved during scheduled refresh"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "47. Which function adjusts time zone within Power Query?",
+    options: [
+      "A) TimeZone.Switch",
+      "B) DateTimeZone.SwitchZone",
+      "C) DateTime.SwitchZone",
+      "D) Date.AdjustZone"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "48. How can you securely embed Power BI reports into a web portal for authenticated users?",
+    options: [
+      "A) Publish to web",
+      "B) Use Power BI Embedded with Azure AD authentication",
+      "C) Export to PDF and upload",
+      "D) Export to PowerPoint"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "49. Which DAX function calculates a year-to-date total for a measure?",
+    options: [
+      "A) YTD([Sales])",
+      "B) TOTALYTD([Sales], [Date])",
+      "C) RUNNINGTOTAL([Sales])",
+      "D) SUMYTD([Sales])"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "50. Where can you monitor refresh history for a Power BI dataset?",
+    options: [
+      "A) Power BI Desktop (File tab)",
+      "B) Power BI Service Dataset Settings > Refresh History",
+      "C) SQL Server Profiler",
+      "D) Data Gateway Dashboard"
+    ],
+    correctIndexes: [1]
+  },
+];
+
+// Filter only questions with single correct answer for radio button usage
+const questions = questionsOriginal.filter(q => q.correctIndexes.length === 1);
+
+// Utility to create question blocks
+const quizForm = document.getElementById("quizForm");
+const submitBtn = document.getElementById("submitBtn");
+const resultDiv = document.getElementById("result");
+
+function createQuestionBlock(q, index) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "border border-indigo-200 rounded-2xl p-6 shadow-md hover:shadow-indigo-300 transition relative bg-indigo-50";
+
+  const qText = document.createElement("p");
+  qText.className = "mb-5 text-lg font-semibold text-indigo-900 leading-relaxed";
+  qText.innerHTML = q.question;
+  wrapper.appendChild(qText);
+
+  const optionsContainer = document.createElement("div");
+  optionsContainer.className = "space-y-4";
+
+  q.options.forEach((option, i) => {
+    const optionId = `q${index}_opt${i}`;
+
+    const label = document.createElement("label");
+    label.htmlFor = optionId;
+    label.className = "flex items-center cursor-pointer select-none text-indigo-800 text-base p-3 rounded-lg hover:bg-indigo-200 transition";
+
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = `q${index}`;
+    input.value = i;
+    input.id = optionId;
+    input.className = "form-radio text-indigo-600 h-5 w-5";
+
+    label.appendChild(input);
+
+    const span = document.createElement("span");
+    span.className = "ml-4";
+    span.textContent = option;
+
+    label.appendChild(span);
+
+    optionsContainer.appendChild(label);
+  });
+
+  wrapper.appendChild(optionsContainer);
+  return wrapper;
+}
+
+function clearHighlights() {
+  document.querySelectorAll("label").forEach(label => {
+    label.classList.remove("bg-green-200", "text-green-900", "bg-red-200", "text-red-900");
+  });
+}
+
+// Render quiz questions
+questions.forEach((q, idx) => {
+  const qElm = createQuestionBlock(q, idx);
+  quizForm.appendChild(qElm);
+});
+
+submitBtn.addEventListener("click", () => {
+  let score = 0;
+  clearHighlights();
+
+  questions.forEach((q, i) => {
+    const options = document.getElementsByName(`q${i}`);
+    let selectedIndex = -1;
+    for(let o=0; o<options.length; o++) {
+      if(options[o].checked) selectedIndex = parseInt(options[o].value);
+    }
+
+    // Highlight correct option green
+    const correctIdx = q.correctIndexes[0];
+    const correctLabel = document.querySelector(`label[for='q${i}_opt${correctIdx}']`);
+    if(correctLabel) {
+      correctLabel.classList.add("bg-green-200", "text-green-900");
+    }
+
+    // If selected correct, add score
+    if(selectedIndex === correctIdx){
+      score++;
+    }
+
+    // Highlight incorrectly selected option red
+    if(selectedIndex !== -1 && selectedIndex !== correctIdx) {
+      const selectedLabel = document.querySelector(`label[for='q${i}_opt${selectedIndex}']`);
+      if(selectedLabel) {
+        selectedLabel.classList.add("bg-red-200", "text-red-900");
+      }
+    }
+  });
+
+  resultDiv.textContent = `Your score: ${score} out of ${questions.length}`;
+  resultDiv.classList.remove("hidden");
+  resultDiv.scrollIntoView({behavior: "smooth"});
+});
+</script>
+</body>
+</html>
