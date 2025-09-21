@@ -1,30 +1,29 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PL-300 Practice Quiz</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PL-300 Practice Quiz: Test 1</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Custom scrollbar for better UX */
     ::-webkit-scrollbar {
       width: 10px;
       height: 10px;
     }
     ::-webkit-scrollbar-track {
-      background: #f3f4f6;
-      border-radius: 6px;
+      background: #f1f5f9;
+      border-radius: 8px;
     }
     ::-webkit-scrollbar-thumb {
       background-color: #6366f1;
-      border-radius: 6px;
-      border: 3px solid #f3f4f6;
+      border-radius: 8px;
+      border: 2px solid #f1f5f9;
     }
   </style>
 </head>
-<body class="bg-gradient-to-tr from-indigo-50 via-white to-indigo-50 min-h-screen flex justify-center items-start py-12 px-4">
+<body class="bg-gradient-to-tr from-indigo-100 via-white to-indigo-200 min-h-screen flex items-start justify-center py-10 px-2">
 
-  <main class="max-w-4xl w-full bg-white shadow-2xl rounded-3xl p-10 md:p-16 ring-1 ring-indigo-200">
+  <main class="flex w-full max-w-5xl bg-white rounded-2xl shadow-2xl ring-1 ring-indigo-200">
 
     <!-- Sidebar -->
     <aside class="w-44 min-w-[120px] bg-indigo-50 rounded-l-2xl flex flex-col items-center py-8 border-r border-indigo-200">
@@ -39,26 +38,27 @@
     </aside>
     
     <!-- Main Content -->
-    
-    <h1 class="text-4xl font-extrabold mb-8 text-center text-indigo-700 drop-shadow-lg">PL-300 Practice Quiz: Test 1</h1>
-    <p class="text-center text-indigo-600 mb-12 max-w-xl mx-auto text-lg font-light tracking-wide">
-      Select the best answer for each question then submit to see your score and highlighted results.
-    </p>
-    <form id="quizForm" class="space-y-10 max-h-[70vh] overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-indigo-100 px-2">
-      <!-- Questions inserted by JS -->
-    </form>
-    <div class="mt-12 flex justify-center">
-      <button
-        id="submitBtn"
-        type="button"
-        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-9 rounded-full shadow-lg transition shadow-indigo-400/80 focus:outline-none focus:ring-4 focus:ring-indigo-300"
-      >
-        Submit Quiz
-      </button>
+    <div class="flex-1 min-w-0 px-4 py-8 md:px-12">
+      <h1 class="text-3xl font-extrabold mb-6 text-center text-indigo-700 drop-shadow-lg tracking-wide">PL-300 Practice Quiz: Test 1</h1>
+      <p class="text-center text-indigo-600 mb-10 max-w-2xl mx-auto text-lg font-light tracking-wide">
+        Answer all the questions and click <strong>Submit</strong> to see your score and highlighted answers.<br>
+        <span class="font-medium text-indigo-700">Select ONE answer for each question.</span>
+      </p>
+      <form id="quizForm" class="space-y-8 max-h-[68vh] overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-indigo-100 px-1">
+        <!-- JS will inject questions here -->
+      </form>
+      <div class="mt-10 flex justify-center">
+        <button
+          id="submitBtn"
+          type="button"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition shadow-indigo-400/80 focus:outline-none focus:ring-4 focus:ring-indigo-300"
+        >
+          Submit Quiz
+        </button>
+      </div>
+      <div id="result" class="mt-12 p-6 bg-green-50 rounded-xl hidden text-center text-2xl font-semibold text-green-900 tracking-wide shadow-inner ring-1 ring-green-400"></div>
     </div>
-    <div id="result" class="mt-12 p-6 bg-green-100 rounded-xl hidden text-center text-2xl font-semibold text-green-900 tracking-wide shadow-inner ring-1 ring-green-500"></div>
   </main>
-
 <script>
 const questionsOriginal = [
   {
