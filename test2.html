@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PL-300 Practice Quiz: Test 2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #6366f1;
+      border-radius: 8px;
+      border: 2px solid #f1f5f9;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-tr from-indigo-100 via-white to-indigo-200 min-h-screen flex items-start justify-center py-10 px-2">
+
+  <main class="flex w-full max-w-5xl bg-white rounded-2xl shadow-2xl ring-1 ring-indigo-200">
+    <!-- Sidebar -->
+    <aside class="w-44 min-w-[120px] bg-indigo-50 rounded-l-2xl flex flex-col items-center py-8 border-r border-indigo-200">
+      <a 
+        href="https://sumit-satsangi.github.io/pl300/" 
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-lg px-7 py-3 mb-4 rounded-xl shadow-lg outline-none transition"
+        title="Go to Test 1"
+      >
+        Test 1
+      </a>
+      <span class="text-indigo-800 text-xl font-bold border-b-4 border-indigo-500 px-5 pb-1">Test 2</span>
+    </aside>
+    
+    <!-- Main Content -->
+    <div class="flex-1 min-w-0 px-4 py-8 md:px-12">
+      <h1 class="text-3xl font-extrabold mb-6 text-center text-indigo-700 drop-shadow-lg tracking-wide">PL-300 Practice Quiz: Test 2</h1>
+      <p class="text-center text-indigo-600 mb-10 max-w-2xl mx-auto text-lg font-light tracking-wide">
+        Answer all the questions and click <strong>Submit</strong> to see your score and highlighted answers.<br>
+        <span class="font-medium text-indigo-700">Select ONE answer for each question.</span>
+      </p>
+      <form id="quizForm" class="space-y-8 max-h-[68vh] overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-indigo-100 px-1">
+        <!-- JS will inject questions here -->
+      </form>
+      <div class="mt-10 flex justify-center">
+        <button
+          id="submitBtn"
+          type="button"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition shadow-indigo-400/80 focus:outline-none focus:ring-4 focus:ring-indigo-300"
+        >
+          Submit Quiz
+        </button>
+      </div>
+      <div id="result" class="mt-12 p-6 bg-green-50 rounded-xl hidden text-center text-2xl font-semibold text-green-900 tracking-wide shadow-inner ring-1 ring-green-400"></div>
+    </div>
+  </main>
+<script>
+// 50 challenging PL-300 questions with only ONE correct answer (radio logic)
+// (This set has a mix of scenario-based and conceptual questions for diversity)
+const questions = [
+  {
+    question: "1. What feature in Power BI allows you to restrict a dataset so each user only accesses records relating to their department?",
+    options: [
+      "A) Row-Level Security (RLS)",
+      "B) Conditional Formatting",
+      "C) Workspace Roles",
+      "D) Sensitivity Labels"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "2. What is the default cardinality for a relationship created between a dimension and a fact table in a Star schema model in Power BI?",
+    options: [
+      "A) One-to-One",
+      "B) One-to-Many",
+      "C) Many-to-Many",
+      "D) Many-to-One"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "3. Which setting must be configured to allow Power BI Service to refresh reports using on-premises SQL Server data?",
+    options: [
+      "A) On-Premises Data Gateway",
+      "B) App Registration in Azure",
+      "C) Premium Workspace",
+      "D) Dataflow Storage"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "4. In Power Query, which operation is used to combine rows of two tables with the same columns?",
+    options: [
+      "A) Merge Queries",
+      "B) Append Queries",
+      "C) Group By",
+      "D) Split Column"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "5. You need to display the most recent sales amount for each product. Which DAX function returns a value from the latest date?",
+    options: [
+      "A) EARLIER",
+      "B) LASTNONBLANK",
+      "C) FIRSTNONBLANK",
+      "D) MAX"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "6. When using the 'Publish to web' feature, who can view the published Power BI report?",
+    options: [
+      "A) Only users in your organization",
+      "B) Only users with a workspace role",
+      "C) Anyone on the internet with the link",
+      "D) Only licensed Power BI users"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "7. What is the maximum data model size (in GB) that can be used in a Power BI Pro workspace?",
+    options: [
+      "A) 10 GB",
+      "B) 2 GB",
+      "C) 1 GB",
+      "D) 500 MB"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "8. Where do you apply a sensitivity label to a Power BI dataset?",
+    options: [
+      "A) In Power BI Desktop, while editing visualizations",
+      "B) In Power BI Service, under Dataset settings",
+      "C) In SQL Server Management Studio",
+      "D) Only during publishing"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "9. What feature would you use to track the number of users who accessed a published Power BI report?",
+    options: [
+      "A) Gateway logs",
+      "B) Usage metrics in Power BI Service",
+      "C) Visual level filters",
+      "D) RLS logs"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "10. What visual is best for analyzing a part-to-whole relationship (e.g., product sales by category as a percentage of total sales)?",
+    options: [
+      "A) Line Chart",
+      "B) Waterfall Chart",
+      "C) Donut Chart",
+      "D) Decomposition Tree"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "11. What connector should you use to bring in data from an Excel workbook stored on SharePoint Online?",
+    options: [
+      "A) Excel Workbook",
+      "B) SharePoint List",
+      "C) Web",
+      "D) SharePoint Folder"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "12. Which transformation in Power Query would you use to separate a full name column into first and last name columns?",
+    options: [
+      "A) Group By",
+      "B) Split Column",
+      "C) Remove Duplicates",
+      "D) Merge Queries"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "13. In a Power BI workspace, which role is required to delete content?",
+    options: [
+      "A) Viewer",
+      "B) Contributor",
+      "C) Member",
+      "D) Admin"
+    ],
+    correctIndexes: [3]
+  },
+  {
+    question: "14. What analysis would benefit most from a Scatter chart in Power BI?",
+    options: [
+      "A) Showing values over time",
+      "B) Measuring correlation between two variables",
+      "C) Showing part-to-whole relationships",
+      "D) Tracking cumulative totals"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "15. Which visual best enables exploration of hierarchies (e.g., from year to quarter to month)?",
+    options: [
+      "A) Matrix visual",
+      "B) Decomposition tree",
+      "C) Waterfall chart",
+      "D) Gauge"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "16. What happens if you configure both RLS (Row-Level Security) and sensitivity labels for a dataset?",
+    options: [
+      "A) Only RLS applies",
+      "B) Only sensitivity label applies",
+      "C) Neither applies",
+      "D) Both are enforced"
+    ],
+    correctIndexes: [3]
+  },
+  {
+    question: "17. Which performance feature is available only in Power BI Premium and not in Pro?",
+    options: [
+      "A) Scheduled refresh",
+      "B) Incremental refresh",
+      "C) Measure calculation",
+      "D) Table preview"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "18. What storage mode would you use for a fact table that must always show up-to-date data from the source?",
+    options: [
+      "A) Import",
+      "B) Dual",
+      "C) DirectQuery",
+      "D) Aggregation"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "19. If a user should have the ability to edit and publish content but not manage workspace settings, which Power BI workspace role should be assigned?",
+    options: [
+      "A) Contributor",
+      "B) Member",
+      "C) Admin",
+      "D) Viewer"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "20. What built-in Power BI feature enables filtering all report pages using a single slicer control?",
+    options: [
+      "A) Visual Level Filters",
+      "B) Page Level Filters",
+      "C) Report Level Filters",
+      "D) Bookmarks"
+    ],
+    correctIndexes: [2]
+  },
+  // ——— 30 new single-answer, challenging PL-300 questions (continued) ———
+  {
+    question: "21. When does Power BI Desktop refresh the 'Auto Date/Time' hidden tables?",
+    options: [
+      "A) At model load and scheduled refresh",
+      "B) Only on publishing",
+      "C) Only when opening report",
+      "D) Never refreshes"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "22. Which DAX function would you use to calculate a cumulative total by date?",
+    options: [
+      "A) CALCULATE",
+      "B) ALL",
+      "C) TOTALYTD",
+      "D) SUMMARIZE"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "23. For fastest performance, which column type should be used for relationships in Power BI models?",
+    options: [
+      "A) Text/String",
+      "B) Decimal",
+      "C) Whole Number",
+      "D) Boolean"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "24. In which area of Power BI Service do you configure dataset scheduled refresh?",
+    options: [
+      "A) Dataset Settings",
+      "B) Workspace Home",
+      "C) App Settings",
+      "D) Personal Settings"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "25. What type of join is performed by default in Power Query's Merge operation?",
+    options: [
+      "A) Left Outer join",
+      "B) Right Outer join",
+      "C) Inner join",
+      "D) Full Outer join"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "26. Which visual is most appropriate for showing actuals vs targets?",
+    options: [
+      "A) Table visual",
+      "B) Donut chart",
+      "C) Gauge",
+      "D) Area chart"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "27. What connector is required to connect Power BI to a SharePoint Online List?",
+    options: [
+      "A) SharePoint Folder",
+      "B) Web",
+      "C) SharePoint List",
+      "D) OData Feed"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "28. How would you prevent a Power BI column from being summarized (e.g., summed or averaged) in visuals?",
+    options: [
+      "A) Change its type to 'Do not summarize'",
+      "B) Remove summarization",
+      "C) Set it as a measure",
+      "D) Remove from model"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "29. What does setting a field as 'Sort by Column' in Power BI model do?",
+    options: [
+      "A) Alphabetizes rows",
+      "B) Customizes sort order in visuals",
+      "C) Applies a default filter",
+      "D) Hides visuals"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "30. Which workspace role CANNOT share dashboards in Power BI Service?",
+    options: [
+      "A) Admin",
+      "B) Contributor",
+      "C) Viewer",
+      "D) Member"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "31. The 'Drillthrough' feature in Power BI creates...",
+    options: [
+      "A) Bookmarks",
+      "B) Detail pages filtered by selection",
+      "C) New calculated columns",
+      "D) Incremental refresh"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "32. What is the highest level of data sensitivity label supported in Power BI?",
+    options: [
+      "A) Confidential",
+      "B) Highly Confidential",
+      "C) General",
+      "D) Private"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "33. Which step ensures that Power BI DirectQuery mode stays up to date with the source?",
+    options: [
+      "A) Enable scheduled refresh",
+      "B) Refresh browser tab",
+      "C) Use Power Query refresh",
+      "D) DirectQuery fetches data live"
+    ],
+    correctIndexes: [3]
+  },
+  {
+    question: "34. What is the main advantage of Aggregations in Power BI?",
+    options: [
+      "A) Improved load performance of visuals",
+      "B) Increased report interactivity",
+      "C) Adds new visuals",
+      "D) Enables custom themes"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "35. In Power Query, which function changes column data type?",
+    options: [
+      "A) Split Column",
+      "B) Change Type",
+      "C) Merge Queries",
+      "D) Remove Duplicates"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "36. What can a Power BI Contributor NOT do?",
+    options: [
+      "A) Edit existing content",
+      "B) Add new datasets",
+      "C) Delete workspace",
+      "D) Publish reports"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "37. What Power BI visual would best display year-over-year sales trends?",
+    options: [
+      "A) Card",
+      "B) Pie chart",
+      "C) Line chart",
+      "D) Stacked column"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "38. Which Power Query step removes duplicate rows from a table?",
+    options: [
+      "A) Remove Duplicates",
+      "B) Keep Top Rows",
+      "C) Group By",
+      "D) Split Column"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "39. In Power BI, which field property is used to set up synonyms for Q&A?",
+    options: [
+      "A) Data type",
+      "B) Description",
+      "C) Synonyms",
+      "D) Sort by Column"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "40. Which Power BI Service feature enables sharing reports with people outside your organization?",
+    options: [
+      "A) Publish to web",
+      "B) External sharing (Guest user)",
+      "C) Premium workspace",
+      "D) Dataflow"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "41. What can you do with a dashboard that you can't do with a report?",
+    options: [
+      "A) Pin live visuals from multiple reports",
+      "B) Add DAX measures",
+      "C) Add RLS",
+      "D) Use drillthrough pages"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "42. Which Power BI visual helps analyze root causes across multiple dimensions?",
+    options: [
+      "A) Decomposition Tree",
+      "B) Waterfall chart",
+      "C) Treemap",
+      "D) Gauge"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "43. If you want to highlight all sales over $100,000 across all visuals, which feature would you use?",
+    options: [
+      "A) Bookmarks",
+      "B) Conditional formatting",
+      "C) Data labels",
+      "D) Tooltips"
+    ],
+    correctIndexes: [1]
+  },
+  {
+    question: "44. What is the best way to combine two columns into a single full address in Power Query?",
+    options: [
+      "A) Split by Delimiter",
+      "B) Group By",
+      "C) Merge Columns",
+      "D) Remove Duplicates"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "45. Which function lets Power Query detect the data type of a column automatically?",
+    options: [
+      "A) Detect Data Type",
+      "B) Change Type",
+      "C) Merge Columns",
+      "D) Remove Duplicates"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "46. Which workspace role is required to publish an app from a workspace?",
+    options: [
+      "A) Admin",
+      "B) Contributor",
+      "C) Member",
+      "D) Viewer"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "47. For which situation would you create a calculated table, rather than a calculated column?",
+    options: [
+      "A) You need to create a summary table",
+      "B) You want to add a category label",
+      "C) You want to format date",
+      "D) You want to change column filter"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "48. What is a benefit of using Dataflow for Power BI?",
+    options: [
+      "A) Reusable, standardized data transformation for multiple datasets",
+      "B) Automatic RLS setup",
+      "C) Premium features for all workspaces",
+      "D) Editing DAX measures"
+    ],
+    correctIndexes: [0]
+  },
+  {
+    question: "49. In Power BI Desktop, which menu lets you manage relationships between tables?",
+    options: [
+      "A) Home",
+      "B) View",
+      "C) Model",
+      "D) Insert"
+    ],
+    correctIndexes: [2]
+  },
+  {
+    question: "50. What export format lets you create a static, PDF-like report from Power BI?",
+    options: [
+      "A) Export to PowerPoint",
+      "B) Export to Excel",
+      "C) Export to PDF",
+      "D) Export to PNG"
+    ],
+    correctIndexes: [2]
+  }
+];
+
+const quizForm = document.getElementById("quizForm");
+const submitBtn = document.getElementById("submitBtn");
+const resultDiv = document.getElementById("result");
+
+function createQuestionBlock(q, index) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "border border-indigo-200 rounded-2xl p-6 shadow-md hover:shadow-indigo-300 transition bg-indigo-50";
+
+  const qText = document.createElement("p");
+  qText.className = "mb-5 text-base font-semibold text-indigo-900 leading-relaxed";
+  qText.innerHTML = q.question;
+  wrapper.appendChild(qText);
+
+  const optionsContainer = document.createElement("div");
+  optionsContainer.className = "space-y-4";
+
+  q.options.forEach((option, i) => {
+    const optionId = `q${index}_opt${i}`;
+    const label = document.createElement("label");
+    label.htmlFor = optionId;
+    label.className = "flex items-center cursor-pointer select-none text-indigo-800 text-base p-3 rounded-lg hover:bg-indigo-200 transition";
+
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = `q${index}`;
+    input.value = i;
+    input.id = optionId;
+    input.className = "form-radio text-indigo-600 h-5 w-5";
+
+    label.appendChild(input);
+
+    const span = document.createElement("span");
+    span.className = "ml-4";
+    span.textContent = option;
+    label.appendChild(span);
+
+    optionsContainer.appendChild(label);
+  });
+
+  wrapper.appendChild(optionsContainer);
+  return wrapper;
+}
+
+function clearHighlights() {
+  document.querySelectorAll("label").forEach(label => {
+    label.classList.remove("bg-green-200", "text-green-900", "bg-red-200", "text-red-900");
+  });
+}
+
+questions.forEach((q, idx) => {
+  const qElm = createQuestionBlock(q, idx);
+  quizForm.appendChild(qElm);
+});
+
+submitBtn.addEventListener("click", () => {
+  let score = 0;
+  clearHighlights();
+
+  questions.forEach((q, i) => {
+    const options = document.getElementsByName(`q${i}`);
+    let selectedIndex = -1;
+    for(let o=0; o<options.length; o++) {
+      if(options[o].checked) selectedIndex = parseInt(options[o].value);
+    }
+
+    // Highlight correct option green
+    const correctIdx = q.correctIndexes[0];
+    const correctLabel = document.querySelector(`label[for='q${i}_opt${correctIdx}']`);
+    if(correctLabel) {
+      correctLabel.classList.add("bg-green-200", "text-green-900");
+    }
+
+    // If selected correct, add score
+    if(selectedIndex === correctIdx){
+      score++;
+    }
+
+    // Highlight incorrectly selected option red
+    if(selectedIndex !== -1 && selectedIndex !== correctIdx) {
+      const selectedLabel = document.querySelector(`label[for='q${i}_opt${selectedIndex}']`);
+      if(selectedLabel) {
+        selectedLabel.classList.add("bg-red-200", "text-red-900");
+      }
+    }
+  });
+
+  resultDiv.textContent = `Your score: ${score} out of ${questions.length}`;
+  resultDiv.classList.remove("hidden");
+  resultDiv.scrollIntoView({behavior: "smooth"});
+});
+</script>
+</body>
+</html>
